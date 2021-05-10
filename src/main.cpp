@@ -98,11 +98,14 @@ int main() {
            *   sequentially every .02 seconds
            */
 
-          // Move the car forward in a straight line at a constant ~50 MPH velocity
+          // Move the car forward in the middle lane at a constant ~50 MPH velocity using Frenet to Cartesian coordinate conversion
           double dist_inc = 0.5;
           for (int i = 0; i < 50; ++i) {
-            next_x_vals.push_back(car_x+(dist_inc*i)*cos(deg2rad(car_yaw)));
-            next_y_vals.push_back(car_y+(dist_inc*i)*sin(deg2rad(car_yaw)));
+            const double next_s = car_s + (i + 1) * dist_inc;
+            const double next_d = 6;
+            const vector<double> xy = getXY(next_s, next_d, map_waypoints_s, map_waypoints_x, map_waypoints_y);
+            next_x_vals.push_back(xy[0]);
+            next_y_vals.push_back(xy[1]);
           }
           
           msgJson["next_x"] = next_x_vals;
