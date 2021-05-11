@@ -55,7 +55,7 @@ int main() {
   int lane = 1;
   
   // Have a reference velocity to target
-  double ref_vel = 49; // mph
+  double ref_vel = 0.0; // mph
   
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,
                &map_waypoints_dx,&map_waypoints_dy, &lane, &ref_vel]
@@ -107,6 +107,8 @@ int main() {
             car_s = end_path_s;
           }
           
+          bool too_close = false;
+          
           // Find ref_v to use
           for (int i = 0; i < sensor_fusion.size(); ++i)
           {
@@ -126,9 +128,19 @@ int main() {
               {
                 // Do some logic here, lower reerence velocity so we dont crash int the cat in front of us,
                 // could also flag to try to change lanes.
-                ref_vel = 29; // mph
+                //ref_vel = 29; // mph
+                too_close = true;
               }
             }
+          }
+          
+          if (too_close)
+          {
+            ref_vel -= .15;
+          }
+          else if (ref_vel < 49)
+          {
+            ref_vel += .15;
           }
           
           // Create a list of widely spaced (x, y) waypoints, evenly spaced at 30m
