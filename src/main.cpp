@@ -126,21 +126,101 @@ int main() {
               // Check s values greater than mine and s gap
               if ((check_car_s > car_s) && ((check_car_s - car_s) < 30))
               {
-                // Do some logic here, lower reerence velocity so we dont crash int the cat in front of us,
+                // Do some logic here, lower reference velocity so we dont crash into the catrin front of us,
                 // could also flag to try to change lanes.
                 //ref_vel = 29; // mph
                 too_close = true;
+                
+                bool lane_changed = false;
+                
+                // Check for free lane on the left-hand side
+                if (lane - 1 >= 0)
+                {
+                  int new_lane = lane - 1;
+                  // Check if this other lane is free - no vehicle in it within a certain distance
+                  bool clear_in_front = true;
+                  bool clear_behind = true;
+                  
+                  for (int j = 0; j < sensor_fusion.size(); ++j)
+                  {
+                    float d = sensor_fusion[j][6];
+                    if (d < (2+4*new_lane+2) && d > (2+4*new_lane-2))
+                    {
+                      double vx = sensor_fusion[j][3];
+                      double vy = sensor_fusion[j][4];
+                      double check_speed = sqrt(vx*vx + vy*vy);
+                      double check_car_s = sensor_fusion[j][5];
+
+                      // If using previous points can project s value outwards in time
+                      check_car_s += ((double)prev_size * .02 * check_speed);
+                      // Check s values greater than mine and s gap
+                      if ((check_car_s > car_s) && ((check_car_s - car_s) < 30))
+                      {
+                        clear_in_front = false;
+                      }
+                      else if ((check_car_s < car_s) && ((car_s - check_car_s) < 30))
+                      {
+                        clear_behind = false;
+                      }
+                    }
+                  }
+                  
+                  if (clear_in_front && clear_behind)
+                  {
+                    lane = new_lane;
+                    lane_changed = true;
+                  }
+                }
+
+                // Check for free lane on the right-hand side
+                if (!lane_changed && lane + 1 <= 2)
+                {
+                  int new_lane = lane + 1;
+                  // Check if this other lane is free - no vehicle in it within a certain distance
+                  bool clear_in_front = true;
+                  bool clear_behind = true;
+                  
+                  for (int j = 0; j < sensor_fusion.size(); ++j)
+                  {
+                    float d = sensor_fusion[j][6];
+                    if (d < (2+4*new_lane+2) && d > (2+4*new_lane-2))
+                    {
+                      double vx = sensor_fusion[j][3];
+                      double vy = sensor_fusion[j][4];
+                      double check_speed = sqrt(vx*vx + vy*vy);
+                      double check_car_s = sensor_fusion[j][5];
+
+                      // If using previous points can project s value outwards in time
+                      check_car_s += ((double)prev_size * .02 * check_speed);
+                      // Check s values greater than mine and s gap
+                      if ((check_car_s > car_s) && ((check_car_s - car_s) < 30))
+                      {
+                        clear_in_front = false;
+                      }
+                      else if ((check_car_s < car_s) && ((car_s - check_car_s) < 30))
+                      {
+                        clear_behind = false;
+                      }
+                    }
+                  }
+                  
+                  if (clear_in_front && clear_behind)
+                  {
+                    lane = new_lane;
+                    lane_changed = true;
+                  }
+                }
               }
             }
           }
           
           if (too_close)
           {
-            ref_vel -= .15;
+            ref_vel -= .3;
           }
           else if (ref_vel < 49)
           {
-            ref_vel += .15;
+            ref_vel += .3;
           }
           
           // Create a list of widely spaced (x, y) waypoints, evenly spaced at 30m
