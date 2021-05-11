@@ -29,6 +29,8 @@ https://youtu.be/_sxbg4Pm6iA
 
 Although the vehicle can run for a very long distance without collision, there is a chance for incidents to happen. For example, the deceleration of the obstacle in front of the ego vehicle can be faster than the fixed deceleration of the ego vehicle. The latter can be a parameter or can be adjusted dynamically based on the obstacle's data.
 
+Another weakness of my current path generation can be that it very likely could not avoid a collision during lane change if another vehicle was changing to the same lane from the other side of that lane at the same time.
+
 Currently the vehicle cannot decide on a lane change based on checking the second adjacent lane - changing two lanes to avoid an obstacle.
 
 A more elegant solution for path planning would involve multiple cost functions choosing from many possible generated trajectories.
