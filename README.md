@@ -1,6 +1,12 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
-   
+
+## Project Writeup
+
+---
+
+The writeup report for the submission can be found in the [writeup_report.md](https://github.com/pkovarynng/CarND-Path-Planning-Project/blob/master/writeup_report.md) file.
+
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).  
 
