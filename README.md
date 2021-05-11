@@ -1,9 +1,9 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
 
-## Project Writeup
-
 ---
+
+## Project Writeup
 
 The writeup report for the submission can be found in the [writeup_report.md](https://github.com/pkovarynng/CarND-Path-Planning-Project/blob/master/writeup_report.md) file.
 
